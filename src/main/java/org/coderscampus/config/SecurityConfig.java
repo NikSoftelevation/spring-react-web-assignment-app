@@ -1,6 +1,6 @@
-package org.coderscampus.AssisgnmentSubmissionApp.config;
+package org.coderscampus.config;
 
-import org.coderscampus.AssisgnmentSubmissionApp.service.UserDetailsServiceImpl;
+import org.coderscampus.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

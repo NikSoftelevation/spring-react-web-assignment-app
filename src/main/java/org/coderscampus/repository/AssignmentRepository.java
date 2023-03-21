@@ -1,7 +1,7 @@
-package org.coderscampus.AssisgnmentSubmissionApp.repository;
+package org.coderscampus.repository;
 
-import org.coderscampus.AssisgnmentSubmissionApp.model.Assignment;
-import org.coderscampus.AssisgnmentSubmissionApp.model.User;
+import org.coderscampus.model.Assignment;
+import org.coderscampus.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Set;

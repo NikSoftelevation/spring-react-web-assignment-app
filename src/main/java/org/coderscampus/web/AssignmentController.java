@@ -1,16 +1,13 @@
-package org.coderscampus.AssisgnmentSubmissionApp.web;
+package org.coderscampus.web;
 
-import org.coderscampus.AssisgnmentSubmissionApp.model.Assignment;
-import org.coderscampus.AssisgnmentSubmissionApp.model.User;
-import org.coderscampus.AssisgnmentSubmissionApp.repository.AssignmentRepository;
-import org.coderscampus.AssisgnmentSubmissionApp.service.AssignmentService;
+import org.coderscampus.model.Assignment;
+import org.coderscampus.model.User;
+import org.coderscampus.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController

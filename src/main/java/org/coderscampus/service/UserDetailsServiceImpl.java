@@ -1,7 +1,7 @@
-package org.coderscampus.AssisgnmentSubmissionApp.service;
+package org.coderscampus.service;
 
-import org.coderscampus.AssisgnmentSubmissionApp.model.User;
-import org.coderscampus.AssisgnmentSubmissionApp.repository.UserRepository;
+import org.coderscampus.model.User;
+import org.coderscampus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

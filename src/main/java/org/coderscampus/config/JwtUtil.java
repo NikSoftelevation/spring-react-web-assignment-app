@@ -1,4 +1,4 @@
-package org.coderscampus.AssisgnmentSubmissionApp.config;
+package org.coderscampus.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

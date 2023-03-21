@@ -1,4 +1,4 @@
-package org.coderscampus.AssisgnmentSubmissionApp.model;
+package org.coderscampus.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

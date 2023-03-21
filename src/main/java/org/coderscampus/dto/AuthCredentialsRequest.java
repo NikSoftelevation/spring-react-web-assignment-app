@@ -1,4 +1,4 @@
-package org.coderscampus.AssisgnmentSubmissionApp.dto;
+package org.coderscampus.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

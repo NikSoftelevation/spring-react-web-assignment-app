@@ -1,8 +1,8 @@
-package org.coderscampus.AssisgnmentSubmissionApp.service;
+package org.coderscampus.service;
 
-import org.coderscampus.AssisgnmentSubmissionApp.model.Assignment;
-import org.coderscampus.AssisgnmentSubmissionApp.model.User;
-import org.coderscampus.AssisgnmentSubmissionApp.repository.AssignmentRepository;
+import org.coderscampus.model.Assignment;
+import org.coderscampus.model.User;
+import org.coderscampus.repository.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;

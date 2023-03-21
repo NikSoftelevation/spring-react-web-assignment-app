@@ -1,4 +1,4 @@
-package org.coderscampus.AssisgnmentSubmissionApp.model;
+package org.coderscampus.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
