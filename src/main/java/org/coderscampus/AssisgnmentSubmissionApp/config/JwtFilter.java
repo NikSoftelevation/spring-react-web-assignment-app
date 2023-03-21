@@ -1,7 +1,6 @@
-package com.coderscampus.AssisgnmentSubmissionApp.config;
+package org.coderscampus.AssisgnmentSubmissionApp.config;
 
-import com.coderscampus.AssisgnmentSubmissionApp.repository.UserRepository;
-import com.coderscampus.AssisgnmentSubmissionApp.config.JwtUtil;
+import org.coderscampus.AssisgnmentSubmissionApp.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

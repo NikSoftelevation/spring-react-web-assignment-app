@@ -1,4 +1,4 @@
-package com.coderscampus.AssisgnmentSubmissionApp.dto;
+package org.coderscampus.AssisgnmentSubmissionApp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthCredentialsResponse {
-    private String token;
+public class AuthCredentialsRequest {
+    private String username;
+    private String password;
 }

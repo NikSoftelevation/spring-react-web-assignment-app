@@ -1,9 +1,9 @@
-package com.coderscampus.AssisgnmentSubmissionApp.web;
+package org.coderscampus.AssisgnmentSubmissionApp.web;
 
-import com.coderscampus.AssisgnmentSubmissionApp.config.JwtUtil;
-import com.coderscampus.AssisgnmentSubmissionApp.dto.AuthCredentialsRequest;
-import com.coderscampus.AssisgnmentSubmissionApp.dto.AuthCredentialsResponse;
-import com.coderscampus.AssisgnmentSubmissionApp.service.UserDetailsServiceImpl;
+import org.coderscampus.AssisgnmentSubmissionApp.config.JwtUtil;
+import org.coderscampus.AssisgnmentSubmissionApp.dto.AuthCredentialsRequest;
+import org.coderscampus.AssisgnmentSubmissionApp.dto.AuthCredentialsResponse;
+import org.coderscampus.AssisgnmentSubmissionApp.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

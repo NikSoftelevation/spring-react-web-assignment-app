@@ -1,8 +1,8 @@
-package com.coderscampus.AssisgnmentSubmissionApp.web;
+package org.coderscampus.AssisgnmentSubmissionApp.web;
 
-import com.coderscampus.AssisgnmentSubmissionApp.model.Assignment;
-import com.coderscampus.AssisgnmentSubmissionApp.model.User;
-import com.coderscampus.AssisgnmentSubmissionApp.service.AssignmentService;
+import org.coderscampus.AssisgnmentSubmissionApp.model.Assignment;
+import org.coderscampus.AssisgnmentSubmissionApp.model.User;
+import org.coderscampus.AssisgnmentSubmissionApp.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +18,7 @@ public class AssignmentController {
     private AssignmentService assignmentService;
 
     @PostMapping("")
-    public ResponseEntity<?> createAssignment(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Assignment> createAssignment(@AuthenticationPrincipal User user) {
         Assignment createdAssignment = assignmentService.save(user);
         return ResponseEntity.ok(createdAssignment);
     }

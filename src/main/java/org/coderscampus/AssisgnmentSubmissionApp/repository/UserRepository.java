@@ -1,6 +1,6 @@
-package com.coderscampus.AssisgnmentSubmissionApp.repository;
+package org.coderscampus.AssisgnmentSubmissionApp.repository;
 
-import com.coderscampus.AssisgnmentSubmissionApp.model.User;
+import org.coderscampus.AssisgnmentSubmissionApp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

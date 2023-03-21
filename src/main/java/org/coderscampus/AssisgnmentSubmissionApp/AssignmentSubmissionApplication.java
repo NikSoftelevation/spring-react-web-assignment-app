@@ -1,15 +1,7 @@
-package com.coderscampus.AssisgnmentSubmissionApp;
+package org.coderscampus.AssisgnmentSubmissionApp;
 
-import com.coderscampus.AssisgnmentSubmissionApp.model.Authority;
-import com.coderscampus.AssisgnmentSubmissionApp.model.User;
-import com.coderscampus.AssisgnmentSubmissionApp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.time.LocalDate;
 
 @SpringBootApplication
 public class AssignmentSubmissionApplication{ /*implements CommandLineRunner {

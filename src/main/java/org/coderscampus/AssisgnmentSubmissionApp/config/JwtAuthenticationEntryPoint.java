@@ -1,4 +1,4 @@
-package com.coderscampus.AssisgnmentSubmissionApp.config;
+package org.coderscampus.AssisgnmentSubmissionApp.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.coderscampus.AssisgnmentSubmissionApp;
+package org.coderscampus.AssisgnmentSubmissionApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
