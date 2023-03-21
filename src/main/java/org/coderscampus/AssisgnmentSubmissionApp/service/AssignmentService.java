@@ -28,4 +28,8 @@ public class AssignmentService {
     public Optional<Assignment> findAssignmentByAssignmentId(int id) {
         return assignmentRepository.findById(id);
     }
+
+    public Assignment updateAssignment(Assignment assignment) {
+        return assignmentRepository.save(assignment);
+    }
 }

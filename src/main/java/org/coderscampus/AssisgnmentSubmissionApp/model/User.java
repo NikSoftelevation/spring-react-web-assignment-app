@@ -1,5 +1,6 @@
 package org.coderscampus.AssisgnmentSubmissionApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,11 @@ public class User implements UserDetails {
     private int id;
     private LocalDate cohortStartDate;
     private String username;
+    @JsonIgnore
     private String password;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
+    private List<Authority> authorities = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -53,6 +58,10 @@ public class User implements UserDetails {
         return true;
     }
 
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -69,10 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new Authority("ROLE_STUDENT"));
-        return roles;
+        return authorities;
     }
 
     @Override
