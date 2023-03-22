@@ -30,15 +30,12 @@ public class AssignmentController {
     }
 
     @GetMapping("/{assignmentId}")
-    public ResponseEntity<?> getAssignmentByAssignmentId(@PathVariable("assignmentId") int assignmentId, @AuthenticationPrincipal User User) {
-        Assignment assignmentOpt = assignmentService.findAssignmentByAssignmentId(assignmentId).orElseThrow(() -> new RuntimeException());
-        return ResponseEntity.ok(assignmentOpt);
+    public ResponseEntity getAssignmentByAssignmentId(@PathVariable("assignmentId") int assignmentId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(assignmentService.findAssignmentByAssignmentId(assignmentId).orElseThrow(() -> new RuntimeException()));
     }
 
     @PutMapping("/{assignmentId}")
-    public ResponseEntity<?> updateAssignment(@PathVariable("assignmentId") int assignmentId, @RequestBody Assignment assignment, @AuthenticationPrincipal User user) {
-        Assignment updatedAssignment = assignmentService.updateAssignment(assignment);
-        return ResponseEntity.ok(updatedAssignment);
+    public ResponseEntity updateAssignment(@PathVariable("assignmentId") int assignmentId, @RequestBody Assignment assignment, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(assignmentService.updateAssignment(assignment));
     }
-
-}
+    }
