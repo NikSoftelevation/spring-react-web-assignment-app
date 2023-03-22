@@ -1,3 +1,4 @@
+import { toHaveTextContent } from "@testing-library/jest-dom/dist/matchers";
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useLocalState } from "../util/useLocalStorage";
@@ -38,34 +39,42 @@ const Login = () => {
   return (
     <>
       <Container className="mt-5">
-        <Form.Group>
-          <Form.Label htmlFor="username" className="fs-4">
-            Username
-          </Form.Label>
-          <Form.Control
-            type="email"
-            id="username"
-            size="lg"
-            value={username}
-            placeholder="Enter your username"
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label htmlFor="password" className="fs-4">
-            Password
-          </Form.Label>
-          <Form.Control
-            type="password"
-            id="password"
-            size="lg"
-            placeholder="Type in your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </Form.Group>
-        <Row>
-          <Col className="mt-2">
+        <Row className="justify-content-center">
+          <Col md="8" lg="6">
+            <Form.Group className="mb-3" controlId="username">
+              <Form.Label className="fs-4">Username</Form.Label>
+              <Form.Control
+                type="email"
+                size="lg"
+                value={username}
+                placeholder="Enter your username"
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center">
+          <Col md="8" lg="6">
+            <Form.Group className="mb-3" controlId="password">
+              <Form.Label className="fs-4">Password</Form.Label>
+              <Form.Control
+                type="password"
+                size="lg"
+                placeholder="Type in your password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center">
+          <Col
+            md="8"
+            lg="6"
+            className="mt-2 d-flex flex-column gap-5 flex-md-row justify-content-md-center"
+          >
             <Button
               id="submit"
               type="button"
@@ -73,6 +82,16 @@ const Login = () => {
               onClick={() => sendLoginRequest()}
             >
               Login
+            </Button>
+            <Button
+              variant="secondary"
+              type="button"
+              size="lg"
+              onClick={() => {
+                window.localStorage.href = "/";
+              }}
+            >
+              Exit
             </Button>
           </Col>
         </Row>

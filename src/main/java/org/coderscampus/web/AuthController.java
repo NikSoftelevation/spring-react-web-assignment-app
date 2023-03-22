@@ -1,8 +1,10 @@
 package org.coderscampus.web;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.coderscampus.config.JwtUtil;
 import org.coderscampus.dto.AuthCredentialsRequest;
 import org.coderscampus.dto.AuthCredentialsResponse;
+import org.coderscampus.model.User;
 import org.coderscampus.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +50,18 @@ public class AuthController {
 
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID CREDENTIALS" + e.getMessage());
+        }
+    }
+
+    //localhost:8082/api/auth/validate?token=blablablabla
+    @GetMapping("/validate")
+    public ResponseEntity validateToken(@RequestParam String token, @AuthenticationPrincipal User user) {
+
+        try {
+            Boolean isValidToken = jwtUtil.validateToken(token, user);
+            return ResponseEntity.ok(isValidToken);
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.ok(false);
         }
     }
 }
