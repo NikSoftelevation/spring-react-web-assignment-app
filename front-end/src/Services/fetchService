@@ -12,8 +12,9 @@ function ajax(url, requestMethod, jwt, requestBody) {
     fetchData.body = JSON.stringify(requestBody);
   }
 
- return fetch(url, fetchData).then((response) => {
+  return fetch(url, fetchData).then((response) => {
     if (response.status === 200) return response.json();
+    if(response.status===400)
   });
 }
 
