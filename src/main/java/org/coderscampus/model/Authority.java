@@ -8,8 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @Setter
 public class Authority implements GrantedAuthority {
-
-    private static final long serialVersionUID = -6520888182797362903L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
