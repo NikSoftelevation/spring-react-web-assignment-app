@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Badge,
   Button,
@@ -26,6 +26,8 @@ const AssignmentView = () => {
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
 
+  const previousAssignmentValue = useRef(assignment);
+
   function updateAssignment(prop, value) {
     const newAssignment = { ...assignment };
     newAssignment[prop] = value;
@@ -34,15 +36,26 @@ const AssignmentView = () => {
 
   function save() {
     //this implies that the student is submitting the assignment for the first time
-    if (assignment.status === null) {
+    if (assignment.status === assignmentStatuses[0].status) {
       updateAssignment("status", assignmentStatuses[1].status);
+    } else {
+      persist();
     }
+  }
+  function persist() {
     ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
       (assignmentData) => {
         setAssignment(assignmentData);
       }
     );
   }
+
+  useEffect(() => {
+    if (previousAssignmentValue.current.status !== assignment.status) {
+      persist();
+    }
+    previousAssignmentValue.current = assignment;
+  }, [assignment]);
 
   useEffect(() => {
     ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
@@ -92,7 +105,10 @@ const AssignmentView = () => {
                 }}
               >
                 {assignmentEnums.map((assignmentEnum) => (
-                  <Dropdown.Item eventKey={assignmentEnum.assignmentNum}>
+                  <Dropdown.Item
+                    key={assignmentEnum.assignmentNum}
+                    eventKey={assignmentEnum.assignmentNum}
+                  >
                     {assignmentEnum.assignmentNum}
                   </Dropdown.Item>
                 ))}
