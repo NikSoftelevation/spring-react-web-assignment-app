@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.coderscampus</groupId>
-    <artifactId>AssisgnmentSubmissionApp</artifactId>
+    <artifactId>AssignmentSubmissionApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>AssignmentSubmissionApp</name>
     <description>Demo project for Spring Boot</description>
@@ -101,6 +101,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <image>
+
+                        <name>softelevation.com:8082/assignment-submission-app:latest
+
+                        </name>
+                    </image>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

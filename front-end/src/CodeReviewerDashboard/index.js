@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { useLocalState } from "../util/useLocalStorage";
 
-const Dashboard = () => {
+const CodeReviewerDashboard = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
   useEffect(() => {
@@ -19,7 +19,7 @@ const Dashboard = () => {
     });
   }
   return (
-    <div style={{ margin: "2em" }}>
+    <Container>
       <Row>
         <Col>
           <div
@@ -34,11 +34,12 @@ const Dashboard = () => {
           </div>
         </Col>
       </Row>
-      <div className="mb-5">
-        <Button size="lg" onClick={() => createAssignment()}>
-          Submit New Assignment
-        </Button>
-      </div>
+      <Row>
+        <Col>
+          <div className="h1">Code Reviewer Dashboard</div>
+        </Col>
+      </Row>
+
       {assignments ? (
         <div
           className="d-grid gap-5"
@@ -77,8 +78,8 @@ const Dashboard = () => {
       ) : (
         <></>
       )}
-    </div>
+    </Container>
   );
 };
 
-export default Dashboard;
+export default CodeReviewerDashboard;
