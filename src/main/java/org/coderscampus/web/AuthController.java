@@ -5,7 +5,7 @@ import org.coderscampus.config.JwtUtil;
 import org.coderscampus.dto.AuthCredentialsRequest;
 import org.coderscampus.dto.AuthCredentialsResponse;
 import org.coderscampus.model.User;
-import org.coderscampus.service.UserDetailsServiceImpl;
+import org.coderscampus.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

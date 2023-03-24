@@ -1,4 +1,4 @@
-package org.coderscampus.service;
+package org.coderscampus.service.impl;
 
 import org.coderscampus.model.User;
 import org.coderscampus.repository.UserRepository;

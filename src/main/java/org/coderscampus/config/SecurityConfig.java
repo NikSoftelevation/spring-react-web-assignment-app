@@ -1,6 +1,6 @@
 package org.coderscampus.config;
 
-import org.coderscampus.service.UserDetailsServiceImpl;
+import org.coderscampus.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

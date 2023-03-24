@@ -1,6 +1,7 @@
 package org.coderscampus.service;
 
 import org.coderscampus.enums.AssignmrentStatusEnum;
+import org.coderscampus.enums.AuthorityEnum;
 import org.coderscampus.model.Assignment;
 import org.coderscampus.model.User;
 import org.coderscampus.repository.AssignmentRepository;
@@ -43,6 +44,10 @@ public class AssignmentService {
     }
 
     public Set<Assignment> findByUser(User user) {
+        //load assignments if you're a code reviewer role
+        user.getAuthorities().stream().filter(auth -> AuthorityEnum.ROLE_CODE_REVIEWER.name().equals(auth.getAuthority()));
+
+        //load assignments if you're a code reviewer role
         return assignmentRepository.findByUser(user);
     }
 
