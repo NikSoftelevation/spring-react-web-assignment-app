@@ -102,9 +102,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <image>
-
                         <name>softelevation.com:8082/assignment-submission-app:latest
-
                         </name>
                     </image>
                     <excludes>
