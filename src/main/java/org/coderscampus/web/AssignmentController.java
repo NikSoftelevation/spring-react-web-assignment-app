@@ -1,9 +1,12 @@
 package org.coderscampus.web;
 
 import org.coderscampus.dto.AssignmentResponseDto;
+import org.coderscampus.enums.AuthorityEnum;
 import org.coderscampus.model.Assignment;
 import org.coderscampus.model.User;
 import org.coderscampus.service.AssignmentService;
+import org.coderscampus.service.UserService;
+import org.coderscampus.util.AuthorityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,7 +18,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/assignments")
 public class AssignmentController {
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private AssignmentService assignmentService;
 
@@ -39,6 +43,17 @@ public class AssignmentController {
 
     @PutMapping("/{assignmentId}")
     public ResponseEntity updateAssignment(@PathVariable("assignmentId") int assignmentId, @RequestBody Assignment assignment, @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(assignmentService.updateAssignment(assignment));
+
+        //add the code reviewer to this assignment if it was claimed
+        if (assignment.getCodeReviewer() != null) {
+            User codeReviewer = assignment.getCodeReviewer();
+            codeReviewer = userService.findUserByUsername(codeReviewer.getUsername()).orElse(new User());
+            if (AuthorityUtil.hasRole(AuthorityEnum.ROLE_CODE_REVIEWER.name(), codeReviewer)) {
+                assignment.setCodeReviewer(codeReviewer);
+            }
+        }
+
+        Assignment updatedAssignment = assignmentService.save(assignment);
+        return ResponseEntity.ok(updatedAssignment);
     }
 }

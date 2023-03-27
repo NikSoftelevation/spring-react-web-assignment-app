@@ -3,10 +3,33 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { useLocalState } from "../util/useLocalStorage";
+import jwt_decode from "jwt-decode";
 
 const CodeReviewerDashboard = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
+
+  function claimAssignment(assignment) {
+    const decodedJwt = jwt_decode(jwt);
+
+    const user = {
+      username: decodedJwt.sub,
+    };
+
+    assignment.codeReviewer = user;
+    //TODO: Don't hardcode this status
+    assignment.status = "In Review";
+    ajax(`/api/assignments/${assignment.id}`, "PUT", jwt, assignment).then(
+      (updatedAssignment) => {
+        //TODO: Update the view for the assignment that changed
+        const assignmentsCopy = [...assignments];
+        const i = assignmentsCopy.findIndex((a) => a.id === assignment.id);
+        assignmentsCopy[i] = updatedAssignment;
+        setAssignments(assignmentsCopy);
+      }
+    );
+  }
+
   useEffect(() => {
     ajax("api/assignments", "GET", jwt).then((assignmentsData) => {
       setAssignments(assignmentsData);
@@ -73,10 +96,10 @@ const CodeReviewerDashboard = () => {
                   <Button
                     variant="secondary"
                     onClick={() => {
-                      window.location.href = `/assignments/${assignment.id}`;
+                      claimAssignment(assignment);
                     }}
                   >
-                    Edit
+                    Claim
                   </Button>
                 </Card.Body>
               </Card>

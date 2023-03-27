@@ -66,4 +66,8 @@ public class AssignmentService {
     public Assignment updateAssignment(Assignment assignment) {
         return assignmentRepository.save(assignment);
     }
+
+    public Assignment save(Assignment assignment) {
+        return assignmentRepository.save(assignment);
+    }
 }

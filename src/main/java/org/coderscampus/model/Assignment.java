@@ -22,4 +22,6 @@ public class Assignment {
     private String codeReviewVideoUrl;
     @ManyToOne(optional = false)
     private User user;
+    @ManyToOne
+    private User codeReviewer;
 }
