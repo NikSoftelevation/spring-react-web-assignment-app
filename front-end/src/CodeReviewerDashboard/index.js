@@ -12,12 +12,6 @@ const CodeReviewerDashboard = () => {
       setAssignments(assignmentsData);
     });
   }, [jwt]);
-
-  function createAssignment() {
-    ajax("api/assignments", "POST", jwt).then((assignment) => {
-      window.location.href = `/assignments/${assignment.id}`;
-    });
-  }
   return (
     <Container>
       <Row>
@@ -39,45 +33,59 @@ const CodeReviewerDashboard = () => {
           <div className="h1">Code Reviewer Dashboard</div>
         </Col>
       </Row>
-
-      {assignments ? (
+      {/*<div className="assignment-wrapper in-review"></div>*/}
+      <div className="assignment-wrapper submitted">
         <div
-          className="d-grid gap-5"
-          style={{ gridTemplateColumns: "repeat(auto-fit,18rem)" }}
+          className="h3"
+          style={{
+            width: "min-content",
+            marginTop: "-2em",
+            marginBottom: "1em",
+            backgroundColor: "white",
+            whiteSpace: "nowrap",
+          }}
         >
-          {assignments.map((assignment) => (
-            <Card
-              key={assignment.id}
-              style={{ width: "18rem", height: "18rem" }}
-            >
-              <Card.Body className="d-flex flex-column justify-content-around">
-                <Card.Title>Assignment #{assignment.id}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  {assignment.status}
-                </Card.Subtitle>
-                <Card.Text style={{ marginTop: "1em" }}>
-                  <p>
-                    <b>GitHub URL</b>: {assignment.githubUrl}
-                  </p>
-                  <p>
-                    <b>Branch</b>: {assignment.branch}
-                  </p>
-                </Card.Text>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    window.location.href = `/assignments/${assignment.id}`;
-                  }}
-                >
-                  Edit
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
+          Awaiting Review
         </div>
-      ) : (
-        <></>
-      )}
+        {assignments ? (
+          <div
+            className="d-grid gap-5"
+            style={{ gridTemplateColumns: "repeat(auto-fit,18rem)" }}
+          >
+            {assignments.map((assignment) => (
+              <Card
+                key={assignment.id}
+                style={{ width: "18rem", height: "18rem" }}
+              >
+                <Card.Body className="d-flex flex-column justify-content-around">
+                  <Card.Title>Assignment #{assignment.id}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    {assignment.status}
+                  </Card.Subtitle>
+                  <Card.Text style={{ marginTop: "1em" }}>
+                    <p>
+                      <b>GitHub URL</b>: {assignment.githubUrl}
+                    </p>
+                    <p>
+                      <b>Branch</b>: {assignment.branch}
+                    </p>
+                  </Card.Text>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      window.location.href = `/assignments/${assignment.id}`;
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </Container>
   );
 };

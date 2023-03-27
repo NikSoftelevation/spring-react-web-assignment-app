@@ -44,11 +44,19 @@ public class AssignmentService {
     }
 
     public Set<Assignment> findByUser(User user) {
-        //load assignments if you're a code reviewer role
-        user.getAuthorities().stream().filter(auth -> AuthorityEnum.ROLE_CODE_REVIEWER.name().equals(auth.getAuthority()));
+        boolean hasCodeReviewerRole = user.getAuthorities()
+                .stream()
+                .filter(auth -> AuthorityEnum.ROLE_CODE_REVIEWER.name().equals(auth.getAuthority()))
+                .count() > 0;
 
-        //load assignments if you're a code reviewer role
-        return assignmentRepository.findByUser(user);
+        if (hasCodeReviewerRole) {
+            //load assignments if you're a code reviewer role
+
+            return assignmentRepository.findByCodeReviewer(user);
+        } else {
+            //load assignments if you're a student role
+            return assignmentRepository.findByUser(user);
+        }
     }
 
     public Optional<Assignment> findAssignmentByAssignmentId(int id) {
