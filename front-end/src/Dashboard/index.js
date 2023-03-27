@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Badge, Button, Card, Col, Row } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { useLocalState } from "../util/useLocalStorage";
@@ -51,9 +51,15 @@ const Dashboard = () => {
             >
               <Card.Body className="d-flex flex-column justify-content-around">
                 <Card.Title>Assignment #{assignment.id}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  {assignment.status}
-                </Card.Subtitle>
+                <div claassName="d-flex align-items-start">
+                  <Badge
+                    pill
+                    bg={assignment.status === "Completed" ? "success" : "info"}
+                    style={{ fontSize: "1em" }}
+                  >
+                    {assignment.status}
+                  </Badge>
+                </div>
                 <Card.Text style={{ marginTop: "1em" }}>
                   <p>
                     <b>GitHub URL</b>: {assignment.githubUrl}

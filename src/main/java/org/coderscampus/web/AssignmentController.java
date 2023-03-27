@@ -36,7 +36,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/{assignmentId}")
-    public ResponseEntity<?> getAssignmentByAssignmentId(@PathVariable("assignmentId") int assignmentId, @AuthenticationPrincipal User user) {
+    public ResponseEntity getAssignmentByAssignmentId(@PathVariable("assignmentId") int assignmentId, @AuthenticationPrincipal User user) {
         Optional<Assignment> assignmentOpt = assignmentService.findAssignmentByAssignmentId(assignmentId);
         return ResponseEntity.ok(new AssignmentResponseDto(assignmentOpt.orElse(new Assignment())));
     }

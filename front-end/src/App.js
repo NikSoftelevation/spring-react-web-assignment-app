@@ -10,6 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import AssignmentView from "./AssignmentView";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CodeReviewerDashboard from "./CodeReviewerDashboard";
+import CodeReviewAssignmentView from ".CodeReviewAssignmentview";
 
 function App() {
   const [jwt, setJwt] = useLocalState("", "jwt");
@@ -23,32 +24,39 @@ function App() {
     }
     return [];
   }
-return (
-  <Routes>
-    <Route
-      path="/dashboard"
-      element={
-        roles.find((role) => role === "ROLE_CODE_REVIEWER") ? (
-          <PrivateRoute>
-            <CodeReviewerDashboard />
-          </PrivateRoute>
-        ) : (
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        )
-      }
-    />
-    <Route
-      path="/assignments/:id"
-      element={
-        <PrivateRoute>
-          <AssignmentView />
-        </PrivateRoute>
-      }
-    />
-    <Route path="login" element={<Login />} />
-    <Route path="/" element={<HomePage />} />
-  </Routes>
-)};
+  return (
+    <Routes>
+      <Route
+        path="/dashboard"
+        element={
+          roles.find((role) => role === "ROLE_CODE_REVIEWER") ? (
+            <PrivateRoute>
+              <CodeReviewerDashboard />
+            </PrivateRoute>
+          ) : (
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          )
+        }
+      />
+      <Route
+        path="/assignments/:id"
+        element={
+          roles.find((role) => role === "ROLE_CODE_REVIEWER") ? (
+            <PrivateRoute>
+              <CodeReviewAssignmentView />
+            </PrivateRoute>
+          ) : (
+            <PrivateRoute>
+              <AssignmentView />
+            </PrivateRoute>
+          )
+        }
+      />
+      <Route path="login" element={<Login />} />
+      <Route path="/" element={<HomePage />} />
+    </Routes>
+  );
+}
 export default App;

@@ -3,6 +3,8 @@ package org.coderscampus.util;
 import org.coderscampus.model.User;
 
 public class AuthorityUtil {
+    private AuthorityUtil() {
+    }
 
     public static Boolean hasRole(String role, User user) {
         return user.getAuthorities()
