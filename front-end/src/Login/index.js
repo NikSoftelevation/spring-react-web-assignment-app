@@ -1,9 +1,12 @@
 import { toHaveTextContent } from "@testing-library/jest-dom/dist/matchers";
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useLocalState } from "../util/useLocalStorage";
 
 const Login = () => {
+  let navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,7 +33,7 @@ const Login = () => {
 
       .then(([body, headers]) => {
         setJwt(headers.get("authorization"));
-        window.location.href = "dashboard";
+        navigate("dashboard");
       })
       .catch((message) => {
         alert(message);
@@ -88,7 +91,7 @@ const Login = () => {
               type="button"
               size="lg"
               onClick={() => {
-                window.localStorage.href = "/";
+                navigate("/");
               }}
             >
               Exit

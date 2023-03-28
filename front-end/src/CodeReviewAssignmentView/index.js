@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Badge,
   Button,
   ButtonGroup,
   Col,
@@ -11,9 +10,13 @@ import {
 } from "react-bootstrap";
 import { Form } from "react-router-dom";
 import ajax from "../Services/fetchService";
+import StatusBadge from "../StatusBadge";
 import { useLocalState } from "../util/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const CodeReviewAssignmentView = () => {
+  let navigate = useNavigate();
+
   const [jwt, setJwt] = useLocalState("", "jwt");
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
@@ -78,9 +81,7 @@ const CodeReviewAssignmentView = () => {
           <h1>Assignment {assignment.id}</h1>
         </Col>
         <Col>
-          <Badge pill bg="info" style={{ fontSize: "1em" }}>
-            {assignment.status}
-          </Badge>
+          <StatusBadge text={assignment.status} />
         </Col>
       </Row>
 
@@ -131,13 +132,23 @@ const CodeReviewAssignmentView = () => {
             </Col>
           </Form.Group>
 
-          <div className="d-flex justify-content-space">
-            <Button
-              size="lg"
-              onClick={() => save(assignmentStatuses[4].status)}
-            >
-              Complete Review
-            </Button>
+          <div className="d-flex gap-5">
+            {assignment.status === "Completed" ? (
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={() => save(assignmentStatuses[2].status)}
+              >
+                Re-Claim
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                onClick={() => save(assignmentStatuses[4].status)}
+              >
+                Complete Review{" "}
+              </Button>
+            )}
 
             {assignment.status === "Needs Update" ? (
               <Button
@@ -150,12 +161,19 @@ const CodeReviewAssignmentView = () => {
             ) : (
               <Button
                 size="lg"
-                variant="secondary"
-                onClick={() => (window.location.href = "/dashboard")}
+                variant="danger"
+                onClick={() => save(assignmentStatuses[3].status)}
               >
-                Back
+                Reject Assignment
               </Button>
             )}
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => navigate("/dashboard")}
+            >
+              Back
+            </Button>
           </div>
         </>
       ) : (

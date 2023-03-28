@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap";
-import { Link, Navigate } from "react-router-dom";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { useLocalState } from "../util/useLocalStorage";
 import jwt_decode from "jwt-decode";
+import StatusBadge from "../StatusBadge";
 
 const CodeReviewerDashboard = () => {
+  let navigate = useNavigate();
+
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
 
   function editReview(assignment) {
-    window.location.href = `/assignments/${assignment.id}`;
+    navigate(`/assignments/${assignment.id}`);
   }
 
   function claimAssignment(assignment) {
@@ -48,7 +51,7 @@ const CodeReviewerDashboard = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               setJwt(null);
-              window.location.href = "/login";
+              navigate("/login");
             }}
           >
             Logout
@@ -79,15 +82,7 @@ const CodeReviewerDashboard = () => {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-start">
-                      <Badge
-                        pill
-                        bg="info"
-                        style={{
-                          fontSize: "1em",
-                        }}
-                      >
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
 
                     <Card.Text style={{ marginTop: "1em" }}>
@@ -147,7 +142,7 @@ const CodeReviewerDashboard = () => {
                     <Button
                       variant="secondary"
                       onClick={() => {
-                        window.location.href = `/assignments/${assignment.id}`;
+                        navigate(`/assignments/${assignment.id}`);
                       }}
                     >
                       View
