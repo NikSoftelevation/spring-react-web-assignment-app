@@ -1,35 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Dropdown,
-  DropdownButton,
-  Row,
-} from "react-bootstrap";
-import { Form } from "react-router-dom";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import CommentContainer from "../CommentContainer";
+import NavBar from "../NavBar";
 import ajax from "../Services/fetchService";
+import { getButtonsByStatusAndRole } from "../Services/statusService";
 import StatusBadge from "../StatusBadge";
-import { useLocalState } from "../util/useLocalStorage";
-import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
-const CodeReviewAssignmentView = () => {
-  let navigate = useNavigate();
-
-  const [jwt, setJwt] = useLocalState("", "jwt");
+const CodeReviewerAssignmentView = () => {
+  const user = useUser();
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
     number: null,
     status: null,
+    codeReviewVideoUrl: null,
   });
-
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
-
-  const previousAssignmentValue = useRef(assignment);
+  const [errorMsg, setErrorMsg] = useState("");
+  const prevAssignmentValue = useRef(assignment);
 
   function updateAssignment(prop, value) {
     const newAssignment = { ...assignment };
@@ -38,34 +29,48 @@ const CodeReviewAssignmentView = () => {
   }
 
   function save(status) {
-    //this implies that the student is submitting the assignment for the first time
+    setErrorMsg("");
+    if (
+      status === "Completed" &&
+      (assignment.codeReviewVideoUrl === null ||
+        assignment.codeReviewVideoUrl === "")
+    ) {
+      setErrorMsg(
+        "Please insert the URL to the video review for the student to watch."
+      );
+      return;
+    }
     if (status && assignment.status !== status) {
       updateAssignment("status", status);
     } else {
       persist();
     }
   }
+
   function persist() {
-    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+    ajax(`/api/assignments/${assignmentId}`, "PUT", user.jwt, assignment).then(
       (assignmentData) => {
         setAssignment(assignmentData);
       }
     );
   }
-
   useEffect(() => {
-    if (previousAssignmentValue.current.status !== assignment.status) {
+    if (
+      assignment &&
+      prevAssignmentValue.current.status !== assignment.status
+    ) {
       persist();
     }
-    previousAssignmentValue.current = assignment;
+    prevAssignmentValue.current = assignment;
   }, [assignment]);
 
   useEffect(() => {
-    ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
+    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
       (assignmentResponse) => {
         let assignmentData = assignmentResponse.assignment;
         if (assignmentData.branch === null) assignmentData.branch = "";
         if (assignmentData.githubUrl === null) assignmentData.githubUrl = "";
+
         setAssignment(assignmentData);
         setAssignmentEnums(assignmentResponse.assignmentEnums);
         setAssignmentStatuses(assignmentResponse.statusEnums);
@@ -74,113 +79,114 @@ const CodeReviewAssignmentView = () => {
   }, []);
 
   return (
-    <Container className="mt-5">
-      <Row className="d-flex align-items-center">
-        <Col>
-          {assignment.number ? <h1>Assignment {assignment.number}</h1> : <></>}
-          <h1>Assignment {assignment.id}</h1>
-        </Col>
-        <Col>
-          <StatusBadge text={assignment.status} />
-        </Col>
-      </Row>
-
-      {assignment ? (
-        <>
-          <Form.Group as={Row} className="my-3" controlId="githubUrl">
-            <Form.Label column sm="3">
-              GitHub Url:
-            </Form.Label>
-            <Col sm="9" md="8" lg="6">
-              <Form.Control
-                id="githubUrl"
-                onChange={(e) => updateAssignment("githubUrl", e.target.value)}
-                type="url"
-                readOnly
-                value={assignment.githubUrl}
-                placeholder="https://github.com/username/repo-name"
-              />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mb-3" controlId="branch">
-            <Form.Label column sm="3" md="2">
-              Branch:
-            </Form.Label>
-            <Col sm="9" md="8" lg="6">
-              <Form.Control
-                id="branch"
-                onChange={(e) => updateAssignment("branch", e.target.value)}
-                type="text"
-                readOnly
-                value={assignment.branch}
-                placeholder="example_branch_name"
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="my-3" controlId="codeReviewVideoUrl">
-            <Form.Label column sm="3" md="2">
-              Video Review Url
-            </Form.Label>
-            <Col sm="9" md="8" lg="6">
-              <Form.Control
-                onChange={(e) => updateAssignment("", e.target.value)}
-                type="url"
-                value={assignment.codeReviewVideoUrl}
-                placeholder="https://screencast-o-matic.com/something"
-              />
-            </Col>
-          </Form.Group>
-
-          <div className="d-flex gap-5">
-            {assignment.status === "Completed" ? (
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => save(assignmentStatuses[2].status)}
-              >
-                Re-Claim
-              </Button>
+    <>
+      <NavBar />
+      <Container className="mt-5">
+        <Row className="d-flex align-items-center">
+          <Col>
+            {assignment && assignment.number ? (
+              <h1>Assignment {assignment.number} </h1>
             ) : (
-              <Button
-                size="lg"
-                onClick={() => save(assignmentStatuses[4].status)}
-              >
-                Complete Review{" "}
-              </Button>
+              <></>
             )}
+          </Col>
+          <Col>
+            {assignment ? <StatusBadge text={assignment.status} /> : <></>}
+          </Col>
+        </Row>
+        <Row>
+          <Col className="error">{errorMsg}</Col>
+        </Row>
 
-            {assignment.status === "Needs Update" ? (
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => save(assignmentStatuses[2].status)}
-              >
-                Re-Claim{" "}
-              </Button>
+        {assignment ? (
+          <>
+            {assignment.user ? (
+              <Form.Group as={Row} className="my-3" controlId="githubUrl">
+                <Form.Label column sm="3" md="2">
+                  Student Name:
+                </Form.Label>
+                <Col sm="9" md="8" lg="6">
+                  <Form.Control
+                    type="text"
+                    readOnly
+                    value={assignment.user.name}
+                  />
+                </Col>
+              </Form.Group>
             ) : (
-              <Button
-                size="lg"
-                variant="danger"
-                onClick={() => save(assignmentStatuses[3].status)}
-              >
-                Reject Assignment
-              </Button>
+              <></>
             )}
-            <Button
-              size="lg"
-              variant="secondary"
-              onClick={() => navigate("/dashboard")}
-            >
-              Back
-            </Button>
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
-    </Container>
+            <Form.Group as={Row} className="my-3" controlId="githubUrl">
+              <Form.Label column sm="3" md="2">
+                GitHub URL:
+              </Form.Label>
+              <Col sm="9" md="8" lg="6">
+                <Form.Control
+                  onChange={(e) =>
+                    updateAssignment("githubUrl", e.target.value)
+                  }
+                  type="url"
+                  readOnly
+                  value={assignment.githubUrl}
+                  placeholder="https://github.com/username/repo-name"
+                />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3" controlId="branch">
+              <Form.Label column sm="3" md="2">
+                Branch:
+              </Form.Label>
+              <Col sm="9" md="8" lg="6">
+                <Form.Control
+                  type="text"
+                  readOnly
+                  placeholder="example_branch_name"
+                  onChange={(e) => updateAssignment("branch", e.target.value)}
+                  value={assignment.branch}
+                />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="my-3" controlId="githubUrl">
+              <Form.Label column sm="3" md="2">
+                Video Review URL:
+              </Form.Label>
+              <Col sm="9" md="8" lg="6">
+                <Form.Control
+                  onChange={(e) =>
+                    updateAssignment("codeReviewVideoUrl", e.target.value)
+                  }
+                  type="url"
+                  value={assignment.codeReviewVideoUrl}
+                  placeholder="https://screencast-o-matic.com/something"
+                />
+              </Col>
+            </Form.Group>
+
+            <div className="d-flex gap-5">
+              {getButtonsByStatusAndRole(
+                assignment.status,
+                "code_reviewer"
+              ).map((btn) => (
+                <Button
+                  size="lg"
+                  variant={btn.variant}
+                  onClick={() => save(btn.nextStatus)}
+                >
+                  {btn.text}
+                </Button>
+              ))}
+            </div>
+
+            <CommentContainer assignmentId={assignmentId} />
+          </>
+        ) : (
+          <></>
+        )}
+      </Container>
+    </>
   );
 };
 
-export default CodeReviewAssignmentView;
+export default CodeReviewerAssignmentView;

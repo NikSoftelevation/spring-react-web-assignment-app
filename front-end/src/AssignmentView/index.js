@@ -6,20 +6,23 @@ import {
   Container,
   Dropdown,
   DropdownButton,
-  Row,
   Form,
+  Row,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import StatusBadge from "../StatusBadge";
-import { useLocalState } from "../util/useLocalStorage";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navbar } from "../Navbar";
+import { useUser } from "../UserProvider";
 import CommentContainer from "../CommentContainer";
+import NavBar from "../NavBar";
+import { getButtonsByStatusAndRole } from "../Services/statusService";
+
 const AssignmentView = () => {
   let navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
-  const assignmentId = window.location.href.split("/assignments/")[1];
+  const user = useUser();
+  const { assignmentId } = useParams();
+
+  // const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
@@ -30,7 +33,7 @@ const AssignmentView = () => {
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
 
-  const previousAssignmentValue = useRef(assignment);
+  const prevAssignmentValue = useRef(assignment);
 
   function updateAssignment(prop, value) {
     const newAssignment = { ...assignment };
@@ -38,31 +41,32 @@ const AssignmentView = () => {
     setAssignment(newAssignment);
   }
 
-  function save() {
-    //this implies that the student is submitting the assignment for the first time
-    if (assignment.status === assignmentStatuses[0].status) {
-      updateAssignment("status", assignmentStatuses[1].status);
+  function save(status) {
+    // this implies that the student is submitting the assignment for the first time
+
+    if (status && assignment.status !== status) {
+      updateAssignment("status", status);
     } else {
       persist();
     }
   }
+
   function persist() {
-    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+    ajax(`/api/assignments/${assignmentId}`, "PUT", user.jwt, assignment).then(
       (assignmentData) => {
         setAssignment(assignmentData);
       }
     );
   }
-
   useEffect(() => {
-    if (previousAssignmentValue.current.status !== assignment.status) {
+    if (prevAssignmentValue.current.status !== assignment.status) {
       persist();
     }
-    previousAssignmentValue.current = assignment;
+    prevAssignmentValue.current = assignment;
   }, [assignment]);
 
   useEffect(() => {
-    ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
+    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
       (assignmentResponse) => {
         let assignmentData = assignmentResponse.assignment;
         if (assignmentData.branch === null) assignmentData.branch = "";
@@ -76,7 +80,7 @@ const AssignmentView = () => {
 
   return (
     <>
-      <Navbar />
+      <NavBar />
       <Container className="mt-5">
         <Row className="d-flex align-items-center">
           <Col>
@@ -93,14 +97,12 @@ const AssignmentView = () => {
             {assignment ? <StatusBadge text={assignment.status} /> : <></>}
           </Col>
         </Row>
-
         {assignment ? (
           <>
             <Form.Group as={Row} className="my-3" controlId="assignmentName">
               <Form.Label column sm="3" md="2">
-                Assignment number :
+                Assignment Number:
               </Form.Label>
-
               <Col sm="9" md="8" lg="6">
                 <DropdownButton
                   as={ButtonGroup}
@@ -127,11 +129,10 @@ const AssignmentView = () => {
             </Form.Group>
             <Form.Group as={Row} className="my-3" controlId="githubUrl">
               <Form.Label column sm="3" md="2">
-                GitHub Url:
+                GitHub URL:
               </Form.Label>
               <Col sm="9" md="8" lg="6">
                 <Form.Control
-                  id="githubUrl"
                   onChange={(e) =>
                     updateAssignment("githubUrl", e.target.value)
                   }
@@ -141,17 +142,17 @@ const AssignmentView = () => {
                 />
               </Col>
             </Form.Group>
+
             <Form.Group as={Row} className="mb-3" controlId="branch">
               <Form.Label column sm="3" md="2">
                 Branch:
               </Form.Label>
               <Col sm="9" md="8" lg="6">
                 <Form.Control
-                  id="branch"
-                  onChange={(e) => updateAssignment("branch", e.target.value)}
                   type="text"
-                  value={assignment.branch}
                   placeholder="example_branch_name"
+                  onChange={(e) => updateAssignment("branch", e.target.value)}
+                  value={assignment.branch}
                 />
               </Col>
             </Form.Group>

@@ -1,25 +1,29 @@
-import "./App.css";
-import { useEffect, useState } from "react";
-import { useLocalState } from "./util/useLocalStorage";
+import { useState, useEffect } from "react";
+import jwt_decode from "jwt-decode";
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import HomePage from "./Homepage";
-import Login from "./Login";
-import jwt_decode from "...jwt-decode";
-import PrivateRoute from "./PrivateRoute";
+import "./App.css";
 import AssignmentView from "./AssignmentView";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Dashboard from "./Dashboard";
 import CodeReviewerDashboard from "./CodeReviewerDashboard";
-import CodeReviewAssignmentView from ".CodeReviewAssignmentview";
+import Homepage from "./Homepage";
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
+import "./custom.scss";
+import CodeReviewerAssignmentView from "./CodeReviewAssignmentView";
+import { useUser } from "./UserProvider";
+import InstructorDashboard from "./InstructorDashboard";
 
 function App() {
-  const [jwt, setJwt] = useLocalState("", "jwt");
-  const [roles, setRoles] = useState(getRolesFromJWT(jwt));
+  const [roles, setRoles] = useState([]);
+  const user = useUser();
+
+  useEffect(() => {
+    setRoles(getRolesFromJWT());
+  }, [user.jwt]);
 
   function getRolesFromJWT() {
-    //get role from jwt and assign via setRoles()
-    if (jwt) {
-      const decodedJwt = jwt_decode(jwt);
+    if (user.jwt) {
+      const decodedJwt = jwt_decode(user.jwt);
       return decodedJwt.authorities;
     }
     return [];
@@ -41,11 +45,23 @@ function App() {
         }
       />
       <Route
-        path="/assignments/:id"
+        path="/instructors/dashboard"
+        element={
+          roles.find((role) => role === "ROLE_INSTRUCTOR") ? (
+            <PrivateRoute>
+              <InstructorDashboard />
+            </PrivateRoute>
+          ) : (
+            <div>You don't have the appropriate role. Talk to Trevor.</div>
+          )
+        }
+      />
+      <Route
+        path="/assignments/:assignmentId"
         element={
           roles.find((role) => role === "ROLE_CODE_REVIEWER") ? (
             <PrivateRoute>
-              <CodeReviewAssignmentView />
+              <CodeReviewerAssignmentView />
             </PrivateRoute>
           ) : (
             <PrivateRoute>
@@ -55,8 +71,9 @@ function App() {
         }
       />
       <Route path="login" element={<Login />} />
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<Homepage />} />
     </Routes>
   );
 }
+
 export default App;

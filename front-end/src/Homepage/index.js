@@ -1,11 +1,16 @@
 import React from "react";
+import { Container } from "react-bootstrap";
+import NavBar from "../NavBar";
 
-const HomePage = () => {
+const Homepage = () => {
   return (
-    <div>
-      <h1>HomePage</h1>
-    </div>
+    <>
+      <NavBar />
+      <Container className="mt-5">
+        <h1>Welcome Fellow Coders</h1>
+      </Container>
+    </>
   );
 };
 
-export default HomePage;
+export default Homepage;

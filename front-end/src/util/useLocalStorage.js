@@ -8,10 +8,12 @@ function useLocalState(defaultValue, key) {
       ? JSON.parse(localStorageValue)
       : defaultValue;
   });
+
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 
   return [value, setValue];
 }
-export {useLocalState};
+
+export { useLocalState };

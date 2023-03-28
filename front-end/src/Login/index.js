@@ -33,7 +33,7 @@ const Login = () => {
 
       .then(([body, headers]) => {
         setJwt(headers.get("authorization"));
-        navigate("dashboard");
+        navigate("/dashboard");
       })
       .catch((message) => {
         alert(message);
